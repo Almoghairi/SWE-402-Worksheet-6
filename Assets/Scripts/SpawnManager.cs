@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    private const float ArenaSpawnRadius = 3.35f;
+    private const float SafeCenterRadius = 1.75f;
+    private const float SpawnHeight = 0.86f;
+
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject powerupPrefab;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Transform player;
     [SerializeField, Range(3f, 12f), Tooltip("Random X/Z range used for arena spawns.")]
-    private float spawnRange = 8f;
+    private float spawnRange = ArenaSpawnRadius;
     [SerializeField, Range(2f, 10f), Tooltip("Base enemy speed before difficulty scaling.")]
     private float baseEnemySpeed = 4f;
 
@@ -71,8 +75,14 @@ public class SpawnManager : MonoBehaviour
 
     private Vector3 GenerateSpawnPosition()
     {
-        Vector3 position = new Vector3(Random.Range(-spawnRange, spawnRange), 0.7f, Random.Range(-spawnRange, spawnRange));
-        return position.magnitude < 2.5f ? position.normalized * 3f : position;
+        float radius = Mathf.Min(spawnRange, ArenaSpawnRadius);
+        Vector2 flatPosition = Random.insideUnitCircle * radius;
+        if (flatPosition.magnitude < SafeCenterRadius)
+        {
+            float angle = Random.Range(0f, Mathf.PI * 2f);
+            flatPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * SafeCenterRadius;
+        }
+        return new Vector3(flatPosition.x, SpawnHeight, flatPosition.y);
     }
 
     private void StopSpawning()

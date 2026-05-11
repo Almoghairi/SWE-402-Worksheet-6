@@ -623,7 +623,7 @@ MonoBehaviour:
   powerupPrefab: {fileID: 7539856287033459161, guid: 131c45535cc4d406aab8d2758b3e353f, type: 3}
   gameManager: {fileID: 378616083}
   player: {fileID: 848345930}
-  spawnRange: 8
+  spawnRange: 3.35
   baseEnemySpeed: 4
 --- !u!4 &454842218
 Transform:
