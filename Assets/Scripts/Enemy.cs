@@ -36,9 +36,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (gameManager == null || !gameManager.IsGameActive || player == null)
+        if (gameManager == null || !gameManager.IsGameActive || player == null || !IsOverArena())
         {
             return;
         }
@@ -47,9 +47,20 @@ public class Enemy : MonoBehaviour
         direction.y = 0f;
         if (direction.sqrMagnitude > 0.001f)
         {
-            enemyRb.AddForce(direction.normalized * speed);
+            Vector3 pursuitVelocity = direction.normalized * speed;
+            enemyRb.linearVelocity = new Vector3(pursuitVelocity.x, 0f, pursuitVelocity.z);
+            transform.forward = direction.normalized;
         }
         KeepStableOnArena();
+    }
+
+    private void Update()
+    {
+        if (gameManager == null || !gameManager.IsGameActive)
+        {
+            return;
+        }
+
         if (transform.position.y < -10f)
         {
             gameManager.UpdateScore(pointValue);
