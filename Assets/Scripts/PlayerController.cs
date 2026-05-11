@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
         if (enemyRb != null)
         {
             Vector3 awayFromPlayer = collision.gameObject.transform.position - transform.position;
+            awayFromPlayer.y = 0f;
             enemyRb.AddForce(awayFromPlayer.normalized * powerupStrength, ForceMode.Impulse);
         }
         if (audioSource != null && hitClip != null) audioSource.PlayOneShot(hitClip, 0.7f);

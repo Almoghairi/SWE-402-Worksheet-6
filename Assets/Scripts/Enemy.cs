@@ -32,7 +32,9 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        Vector3 direction = (player.position - transform.position).normalized;
+        Vector3 direction = player.position - transform.position;
+        direction.y = 0f;
+        direction.Normalize();
         enemyRb.AddForce(direction * speed);
         if (transform.position.y < -10f)
         {
